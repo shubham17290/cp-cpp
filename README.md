@@ -4,6 +4,8 @@ A curated collection of **short, printable notes** for **C (Competitive Programm
 
 > Useful for students, competitive programmers, and anyone brushing up on C/C++ fundamentals, OOP, STL, exception handling, and file handling.
 
+🌐 **Live site:** https://shubham17290.github.io/cp-cpp/
+
 ## 📚 Contents
 
 ### `01 CP/` — C (Competitive Programming) notes
@@ -31,7 +33,7 @@ A curated collection of **short, printable notes** for **C (Competitive Programm
 4. For searching, use the file names / topics listed above.
 
 ```bash
-git clone https://github.com/shubham17290/cp-cpp-short-notes.git
+git clone https://github.com/shubham17290/cp-cpp.git
 ```
 
 ## 🎯 Topics covered
