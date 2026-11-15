@@ -3,186 +3,349 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CP & C++ Short Notes</title>
+  <title>CP &amp; C++ Short Notes</title>
   <meta name="description" content="A curated collection of short, printable notes for C (Competitive Programming) and C++ — cheat sheets, STL, OOP, exception handling, file handling." />
   <meta name="keywords" content="c, cpp, c++, competitive programming, cp, short notes, cheat sheet, stl, oops, exception handling, file handling, interview prep" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f172a;
-      --card: #1e293b;
-      --accent: #38bdf8;
-      --accent2: #a78bfa;
-      --text: #e2e8f0;
-      --muted: #94a3b8;
-      --border: #334155;
+      --bg: #0a0e14;
+      --bg-2: #0f1419;
+      --panel: #131920;
+      --panel-2: #1a222c;
+      --border: #243040;
+      --border-hi: #3a4a5e;
+      --text: #d8e0ea;
+      --muted: #7a8a9e;
+      --dim: #4a5a6e;
+      --accent: #f59e0b;
+      --accent-dim: #b45309;
+      --cyan: #22d3ee;
+      --green: #22c55e;
+      --red: #ef4444;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.55;
       min-height: 100vh;
+      background-image:
+        linear-gradient(rgba(245,158,11,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,158,11,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
     }
-    header {
-      text-align: center;
-      padding: 4rem 1.5rem 2rem;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    a { color: inherit; }
+
+    /* Top bar */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,14,20,0.85);
+      backdrop-filter: blur(8px);
+      position: sticky; top: 0; z-index: 50;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.8rem;
+    }
+    .topbar .brand { display: flex; align-items: center; gap: 0.6rem; color: var(--accent); font-weight: 700; letter-spacing: 0.02em; }
+    .topbar .brand .dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; box-shadow: 0 0 8px var(--green); }
+    .topbar nav { display: flex; gap: 1.4rem; color: var(--muted); }
+    .topbar nav a { text-decoration: none; transition: color .15s; }
+    .topbar nav a:hover { color: var(--accent); }
+    .topbar .meta { color: var(--dim); }
+
+    /* Hero */
+    header.hero {
+      padding: 4rem 1.5rem 3rem;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    header.hero::before {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 20% 40%, rgba(245,158,11,0.08), transparent 50%),
+                  radial-gradient(ellipse at 80% 60%, rgba(34,211,238,0.06), transparent 50%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 1180px; margin: 0 auto; position: relative; }
+    .prompt {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.85rem; color: var(--muted);
+      margin-bottom: 1.2rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .prompt .chev { color: var(--accent); }
+    .prompt .cursor { display: inline-block; width: 8px; height: 14px; background: var(--accent); animation: blink 1.1s steps(2) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    h1.title {
+      font-family: "JetBrains Mono", monospace;
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      margin-bottom: 1rem;
+    }
+    h1.title .accent { color: var(--accent); }
+    h1.title .slash { color: var(--dim); font-weight: 400; }
+    .hero p.lede {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 640px;
+      margin-bottom: 1.8rem;
+    }
+    .stats {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.8rem;
+    }
+    .stat { display: flex; flex-direction: column; gap: 0.15rem; }
+    .stat .num { color: var(--accent); font-size: 1.4rem; font-weight: 700; }
+    .stat .lbl { color: var(--dim); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.7rem; }
+
+    main { max-width: 1180px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+    /* Search */
+    .search-wrap { position: relative; margin-bottom: 2.5rem; }
+    .search-wrap .prefix {
+      position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+      font-family: "JetBrains Mono", monospace; color: var(--accent); font-size: 0.9rem;
+      pointer-events: none;
+    }
+    .search {
+      width: 100%; padding: 0.95rem 1.2rem 0.95rem 2.6rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.9rem;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .search::placeholder { color: var(--dim); }
+    .search:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(245,158,11,0.12); }
+
+    /* Section */
+    section { margin-bottom: 3rem; }
+    .section-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.6rem;
       border-bottom: 1px solid var(--border);
     }
-    header h1 {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin-bottom: 0.5rem;
+    .section-head h2 {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1.05rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      display: flex; align-items: center; gap: 0.7rem;
     }
-    header p { color: var(--muted); max-width: 700px; margin: 0 auto; }
-    .badge-row { margin-top: 1.2rem; display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; }
-    .badge { background: var(--card); border: 1px solid var(--border); padding: .35rem .8rem; border-radius: 999px; font-size: .8rem; color: var(--muted); }
-    main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-    .search {
-      width: 100%; padding: .9rem 1.2rem; border-radius: 10px;
-      border: 1px solid var(--border); background: var(--card); color: var(--text);
-      font-size: 1rem; margin-bottom: 2rem;
+    .section-head h2 .tag {
+      font-size: 0.7rem; color: var(--bg); background: var(--accent);
+      padding: 0.15rem 0.5rem; border-radius: 2px; font-weight: 700;
     }
-    .search:focus { outline: none; border-color: var(--accent); }
-    section { margin-bottom: 3rem; }
-    section h2 {
-      font-size: 1.5rem; margin-bottom: 1rem;
-      display: flex; align-items: center; gap: .6rem;
-    }
-    section h2::before { content: ""; width: 6px; height: 24px; background: var(--accent); border-radius: 3px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+    .section-head h2 .tag.alt { background: var(--cyan); }
+    .section-head .count { font-family: "JetBrains Mono", monospace; font-size: 0.75rem; color: var(--dim); }
+
+    /* Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.85rem; }
+
+    /* Card */
     .card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-      padding: 1.2rem; display: flex; flex-direction: column; gap: .5rem;
-      transition: transform .15s, border-color .15s;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.1rem 1.2rem;
+      display: flex; flex-direction: column; gap: 0.55rem;
+      position: relative;
+      transition: border-color .15s, transform .15s, background .15s;
+      overflow: hidden;
     }
-    .card:hover { transform: translateY(-3px); border-color: var(--accent); }
-    .card .icon { font-size: 1.6rem; }
-    .card h3 { font-size: 1rem; }
-    .card p { color: var(--muted); font-size: .85rem; flex: 1; }
-    .card a {
-      display: inline-block; margin-top: .5rem; padding: .5rem .9rem;
-      background: var(--accent); color: #0f172a; border-radius: 8px;
-      text-decoration: none; font-weight: 600; font-size: .85rem; text-align: center;
+    .card::before {
+      content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px; background: var(--border-hi);
+      transition: background .15s;
     }
-    .card a:hover { opacity: .9; }
-    .card .tag { font-size: .7rem; color: var(--accent2); }
-    footer { text-align: center; padding: 2rem 1rem; color: var(--muted); border-top: 1px solid var(--border); }
-    footer a { color: var(--accent); text-decoration: none; }
+    .card:hover { border-color: var(--border-hi); transform: translateY(-2px); background: var(--panel-2); }
+    .card:hover::before { background: var(--accent); }
+    .card .row { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; }
+    .card .icon {
+      width: 34px; height: 34px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 0.85rem;
+      border: 1px solid var(--border-hi); color: var(--accent);
+      background: rgba(245,158,11,0.06);
+      border-radius: 3px; flex-shrink: 0;
+    }
+    .card .icon.alt { color: var(--cyan); background: rgba(34,211,238,0.06); }
+    .card h3 { font-size: 0.95rem; font-weight: 600; letter-spacing: -0.01em; }
+    .card p { color: var(--muted); font-size: 0.82rem; flex: 1; }
+    .card .meta { display: flex; align-items: center; justify-content: space-between; margin-top: 0.4rem; }
+    .card .ext {
+      font-family: "JetBrains Mono", monospace; font-size: 0.7rem;
+      color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .card a.open {
+      font-family: "JetBrains Mono", monospace;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.45rem 0.85rem;
+      background: transparent; color: var(--accent);
+      border: 1px solid var(--accent-dim);
+      border-radius: 3px;
+      text-decoration: none; font-weight: 600; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      transition: background .15s, color .15s;
+    }
+    .card a.open:hover { background: var(--accent); color: var(--bg); }
+    .card a.open.alt { color: var(--cyan); border-color: #0e7490; }
+    .card a.open.alt:hover { background: var(--cyan); color: var(--bg); }
+
     .hidden { display: none !important; }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.8rem 1.5rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem; color: var(--dim);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.6rem;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      .topbar nav { display: none; }
+      .stats { gap: 1.2rem; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>CP &amp; C++ Short Notes</h1>
-    <p>A curated collection of short, printable notes for C (Competitive Programming) and C++. Perfect for quick revision and interview prep.</p>
-    <div class="badge-row">
-      <span class="badge">📄 PDFs</span>
-      <span class="badge">🖼️ Images</span>
-      <span class="badge">⚡ Quick Revision</span>
-      <span class="badge">🎯 Interview Prep</span>
+
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> cp-cpp // short notes</div>
+    <nav>
+      <a href="#c">C</a>
+      <a href="#cpp">C++</a>
+      <a href="https://github.com/shubham17290/cp-cpp" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <div class="meta">v1.0.0</div>
+  </div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="prompt">
+        <span class="chev">$</span> cat README.md
+        <span class="cursor"></span>
+      </div>
+      <h1 class="title">CP <span class="slash">&amp;</span> C++<br><span class="accent">Short Notes</span></h1>
+      <p class="lede">A curated, printable collection of C and C++ notes — cheat sheets, STL, OOP, exception handling, file handling. Built for fast revision and interview prep.</p>
+      <div class="stats">
+        <div class="stat"><span class="num">11</span><span class="lbl">Files</span></div>
+        <div class="stat"><span class="num">2</span><span class="lbl">Languages</span></div>
+        <div class="stat"><span class="num">~4MB</span><span class="lbl">Size</span></div>
+        <div class="stat"><span class="num">PDF+JPG</span><span class="lbl">Formats</span></div>
+      </div>
     </div>
   </header>
 
   <main>
-    <input id="search" class="search" type="text" placeholder="Search notes by topic (e.g. STL, OOP, file handling)..." />
+    <div class="search-wrap">
+      <span class="prefix">&gt;</span>
+      <input id="search" class="search" type="text" placeholder="search notes by topic (stl, oop, file handling)..." />
+    </div>
 
-    <section>
-      <h2>C (Competitive Programming)</h2>
+    <section id="c">
+      <div class="section-head">
+        <h2><span class="tag">C</span> Competitive Programming</h2>
+        <span class="count">7 files</span>
+      </div>
       <div class="grid">
         <div class="card" data-keywords="c core basics">
-          <div class="icon">📘</div>
+          <div class="row"><div class="icon">C</div><span class="ext">pdf</span></div>
           <h3>Core C Notes (Part 2)</h3>
-          <p class="tag">PDF</p>
           <p>Core C programming notes — part 2.</p>
-          <a href="01%20CP/01%20CP%2002%20.pdf" target="_blank" rel="noopener">Open PDF</a>
+          <div class="meta"><span></span><a class="open" href="01%20CP/01%20CP%2002%20.pdf" target="_blank" rel="noopener">Open ↗</a></div>
         </div>
         <div class="card" data-keywords="c basics cheatsheet">
-          <div class="icon">📘</div>
+          <div class="row"><div class="icon">C</div><span class="ext">pdf / jpg</span></div>
           <h3>C Basics Cheatsheet</h3>
-          <p class="tag">PDF / JPG</p>
           <p>C fundamentals quick reference.</p>
-          <a href="01%20CP/images/01%20CP%20.pdf" target="_blank" rel="noopener">Open PDF</a>
+          <div class="meta"><span></span><a class="open" href="01%20CP/images/01%20CP%20.pdf" target="_blank" rel="noopener">Open ↗</a></div>
         </div>
         <div class="card" data-keywords="c reference">
-          <div class="icon">🖼️</div>
+          <div class="row"><div class="icon">C</div><span class="ext">jpg</span></div>
           <h3>C Reference Sheet 1</h3>
-          <p class="tag">JPG</p>
           <p>Visual C reference sheet.</p>
-          <a href="01%20CP/images/01%20CP%20.jpg" target="_blank" rel="noopener">Open Image</a>
+          <div class="meta"><span></span><a class="open" href="01%20CP/images/01%20CP%20.jpg" target="_blank" rel="noopener">Open ↗</a></div>
         </div>
         <div class="card" data-keywords="c reference">
-          <div class="icon">🖼️</div>
+          <div class="row"><div class="icon">C</div><span class="ext">jpg</span></div>
           <h3>C Reference Sheet 2</h3>
-          <p class="tag">JPG</p>
           <p>Visual C reference sheet.</p>
-          <a href="01%20CP/images/02%20CP%20.jpg" target="_blank" rel="noopener">Open Image</a>
+          <div class="meta"><span></span><a class="open" href="01%20CP/images/02%20CP%20.jpg" target="_blank" rel="noopener">Open ↗</a></div>
         </div>
         <div class="card" data-keywords="c reference">
-          <div class="icon">🖼️</div>
+          <div class="row"><div class="icon">C</div><span class="ext">jpg</span></div>
           <h3>C Reference Sheet 3</h3>
-          <p class="tag">JPG</p>
           <p>Visual C reference sheet.</p>
-          <a href="01%20CP/images/03%20CP%20.jpg" target="_blank" rel="noopener">Open Image</a>
+          <div class="meta"><span></span><a class="open" href="01%20CP/images/03%20CP%20.jpg" target="_blank" rel="noopener">Open ↗</a></div>
         </div>
         <div class="card" data-keywords="c cheat sheet">
-          <div class="icon">📘</div>
+          <div class="row"><div class="icon">C</div><span class="ext">pdf</span></div>
           <h3>C Cheat Sheet</h3>
-          <p class="tag">PDF</p>
           <p>Compact C cheat sheet.</p>
-          <a href="01%20CP/images/05%20C.CheatSheet.pdf" target="_blank" rel="noopener">Open PDF</a>
+          <div class="meta"><span></span><a class="open" href="01%20CP/images/05%20C.CheatSheet.pdf" target="_blank" rel="noopener">Open ↗</a></div>
         </div>
         <div class="card" data-keywords="c file handling">
-          <div class="icon">📘</div>
+          <div class="row"><div class="icon">C</div><span class="ext">pdf</span></div>
           <h3>C File Handling</h3>
-          <p class="tag">PDF</p>
           <p>File handling in C.</p>
-          <a href="01%20CP/images/06%20CP%20file%20handling.pdf" target="_blank" rel="noopener">Open PDF</a>
+          <div class="meta"><span></span><a class="open" href="01%20CP/images/06%20CP%20file%20handling.pdf" target="_blank" rel="noopener">Open ↗</a></div>
         </div>
       </div>
     </section>
 
-    <section>
-      <h2>C++</h2>
+    <section id="cpp">
+      <div class="section-head">
+        <h2><span class="tag alt">C++</span> C++ Notes</h2>
+        <span class="count">4 files</span>
+      </div>
       <div class="grid">
         <div class="card" data-keywords="cpp core basics">
-          <div class="icon">📕</div>
+          <div class="row"><div class="icon alt">C++</div><span class="ext">pdf</span></div>
           <h3>Core C++ Notes</h3>
-          <p class="tag">PDF</p>
           <p>Core C++ programming notes.</p>
-          <a href="02%20CPP/01%20CPP.pdf" target="_blank" rel="noopener">Open PDF</a>
+          <div class="meta"><span></span><a class="open alt" href="02%20CPP/01%20CPP.pdf" target="_blank" rel="noopener">Open ↗</a></div>
         </div>
         <div class="card" data-keywords="cpp oop object oriented">
-          <div class="icon">📕</div>
+          <div class="row"><div class="icon alt">C++</div><span class="ext">pdf</span></div>
           <h3>C++ OOP</h3>
-          <p class="tag">PDF</p>
           <p>Object-Oriented Programming in C++.</p>
-          <a href="02%20CPP/seprate/02%20CPP%20OOPS.pdf" target="_blank" rel="noopener">Open PDF</a>
+          <div class="meta"><span></span><a class="open alt" href="02%20CPP/seprate/02%20CPP%20OOPS.pdf" target="_blank" rel="noopener">Open ↗</a></div>
         </div>
         <div class="card" data-keywords="cpp stl standard template library">
-          <div class="icon">📕</div>
+          <div class="row"><div class="icon alt">C++</div><span class="ext">pdf</span></div>
           <h3>C++ STL</h3>
-          <p class="tag">PDF</p>
           <p>Standard Template Library (STL).</p>
-          <a href="02%20CPP/seprate/03%20CPP%20STL.pdf" target="_blank" rel="noopener">Open PDF</a>
+          <div class="meta"><span></span><a class="open alt" href="02%20CPP/seprate/03%20CPP%20STL.pdf" target="_blank" rel="noopener">Open ↗</a></div>
         </div>
         <div class="card" data-keywords="cpp exception handling">
-          <div class="icon">📕</div>
+          <div class="row"><div class="icon alt">C++</div><span class="ext">pdf</span></div>
           <h3>C++ Exception Handling</h3>
-          <p class="tag">PDF</p>
           <p>Exception handling in C++.</p>
-          <a href="02%20CPP/seprate/06%20%20CPP%20exception%20handling.pdf" target="_blank" rel="noopener">Open PDF</a>
+          <div class="meta"><span></span><a class="open alt" href="02%20CPP/seprate/06%20%20CPP%20exception%20handling.pdf" target="_blank" rel="noopener">Open ↗</a></div>
         </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <p>Shared for educational purposes. <a href="https://github.com/shubham17290/cp-cpp">View on GitHub</a></p>
+    <span>// shared for educational purposes</span>
+    <span><a href="https://github.com/shubham17290/cp-cpp" target="_blank" rel="noopener">github.com/shubham17290/cp-cpp</a></span>
   </footer>
 
   <script>
